@@ -13,21 +13,18 @@ import {
 import './Home.css';
 
 const Home = () => {
-  const reddit = useSelector((state) => state.reddit);
-  const { isLoading, error, searchTerm, selectedSubreddit } = reddit;
+  const { isLoading, error, searchTerm, selectedSubreddit } = useSelector(
+    (state) => state.reddit
+  );
   const posts = useSelector(selectFilteredPosts);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchPosts(selectedSubreddit));
-  }, [selectedSubreddit]);
+  }, [dispatch, selectedSubreddit]);
 
-  const onToggleComments = (index) => {
-    const getComments = (permalink) => {
-      dispatch(fetchComments(index, permalink));
-    };
-
-    return getComments;
+  const onToggleComments = (index) => (permalink) => {
+    dispatch(fetchComments(index, permalink));
   };
 
   if (isLoading) {
@@ -55,7 +52,7 @@ const Home = () => {
   if (posts.length === 0) {
     return (
       <div className="error">
-        <h2>No posts matching "{searchTerm}"</h2>
+        <h2>No posts matching &quot;{searchTerm}&quot;</h2>
         <button type="button" onClick={() => dispatch(setSearchTerm(''))}>
           Go home
         </button>
